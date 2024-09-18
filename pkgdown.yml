@@ -1,0 +1,9 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  example_computation: example_computation.html
+last_built: 2024-09-18T12:20Z
+urls:
+  reference: gekvgra.github.io/reference
+  article: gekvgra.github.io/articles
