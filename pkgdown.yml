@@ -3,7 +3,8 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   example_computation: example_computation.html
-last_built: 2024-09-18T12:20Z
+  pcg_grouping_and_hierarchy: pcg_grouping_and_hierarchy.html
+last_built: 2024-09-18T13:14Z
 urls:
-  reference: gekvgra.github.io/reference
-  article: gekvgra.github.io/articles
+  reference: gekvgra.github.io/GErapcg/reference
+  article: gekvgra.github.io/GErapcg/articles

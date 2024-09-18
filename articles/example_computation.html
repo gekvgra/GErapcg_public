@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/example_computation.html">RA Parallelberechnung mit synthetischen Daten</a></li>
+    <li><a class="dropdown-item" href="../articles/pcg_grouping_and_hierarchy.html">Zuweisung der PCG und Hierarchisierung</a></li>
   </ul>
 </li>
       </ul>
@@ -78,7 +79,8 @@ denjenigen aus SORA PCG übereinstimmen.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.kvg.org/de/risikoausgleich-_content---1--1047.html" class="external-link">GErapcg</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.kvg.org/de/risikoausgleich-_content---1--1047.html" class="external-link">GErapcg</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">GEviz</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="konfiguration">Konfiguration<a class="anchor" aria-label="anchor" href="#konfiguration"></a>
@@ -131,235 +133,155 @@ Aargau<a class="anchor" aria-label="anchor" href="#%C3%BCbersicht-berechnungserg
 <span>    `Entlastung junge Erwachsene` <span class="op">=</span> <span class="va">D_total</span>,</span>
 <span>    `Saldo` <span class="op">=</span> <span class="va">saldo_mit_D</span></span>
 <span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"html"</span>, digits <span class="op">=</span> <span class="va">use_digits</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr>
-<th style="text-align:right;">
-BagNr
-</th>
-<th style="text-align:left;">
-Kanton
-</th>
-<th style="text-align:left;">
-Altersklasse
-</th>
-<th style="text-align:left;">
-Geschlecht
-</th>
-<th style="text-align:left;">
-Aufenthalt Vorjahr
-</th>
-<th style="text-align:right;">
-Monate
-</th>
-<th style="text-align:right;">
-Zuschlag Risikogruppe (Total)
-</th>
-<th style="text-align:right;">
-Zuschlag PCG (Total)
-</th>
-<th style="text-align:right;">
-Entlastung junge Erwachsene
-</th>
-<th style="text-align:right;">
-Saldo
-</th>
-</tr></thead>
-<tbody>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">GEviz</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GEviz/man/table_ge.html" class="external-link">table_ge</a></span><span class="op">(</span></span>
+<span>    titel <span class="op">=</span> <span class="st">"Übersicht Saldo für Versicherer 1, Kanton Aargau"</span>,</span>
+<span>    beschrieb <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
+<table class="table huxtable" data-quarto-disable-processing="true" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; width: 100%; margin-left: auto; margin-right: auto;  " id="tab:saldo">
+<caption style="caption-side: top; text-align: left;">Übersicht Saldo für Versicherer 1, Kanton Aargau</caption>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
 <tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-AG
-</td>
-<td style="text-align:left;">
-0-18
-</td>
-<td style="text-align:left;">
-F
-</td>
-<td style="text-align:left;">
-J
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
+<th style="vertical-align: middle; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">BagNr</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Kanton</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Altersklasse</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Geschlecht</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Aufenthalt Vorjahr</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Monate</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Zuschlag Risikogruppe (Total)</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Zuschlag PCG (Total)</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Entlastung junge Erwachsene</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Saldo</span></th>
 </tr>
 <tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-AG
-</td>
-<td style="text-align:left;">
-19-25
-</td>
-<td style="text-align:left;">
-F
-</td>
-<td style="text-align:left;">
-J
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00-18.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-AG
-</td>
-<td style="text-align:left;">
-26-30
-</td>
-<td style="text-align:left;">
-F
-</td>
-<td style="text-align:left;">
-J
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">19.00-25.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-AG
-</td>
-<td style="text-align:left;">
-31-35
-</td>
-<td style="text-align:left;">
-F
-</td>
-<td style="text-align:left;">
-J
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">26.00-30.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-AG
-</td>
-<td style="text-align:left;">
-36-40
-</td>
-<td style="text-align:left;">
-F
-</td>
-<td style="text-align:left;">
-J
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">31.00-35.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-AG
-</td>
-<td style="text-align:left;">
-41-45
-</td>
-<td style="text-align:left;">
-F
-</td>
-<td style="text-align:left;">
-J
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-8455.14
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
--59.05
-</td>
-<td style="text-align:right;">
-8396.09
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">36.00-40.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
 </tr>
-</tbody>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">41.00-45.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">12.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">8455.14</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">-59.05</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">8396.09</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">46.00-50.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">51.00-55.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">56.00-60.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AG</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">61.00-65.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">F</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">J</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+</tr>
+<tr><td colspan="10" style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0pt 0pt; border-top-color: rgb(0, 68, 131);    padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">  Quelle:  Eigene Darstellung, GE KVG.</td></tr>
 </table>
 </div>
 </div>
@@ -384,172 +306,119 @@ J
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>PCG <span class="op">=</span> <span class="va">pcg</span>, `PCG Ansatz` <span class="op">=</span> <span class="va">pcg_ansatz</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Jahr</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">`Total (Zuschlag)`</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"html"</span>, digits <span class="op">=</span> <span class="va">use_digits</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr>
-<th style="text-align:left;">
-PCG
-</th>
-<th style="text-align:right;">
-PCG Ansatz
-</th>
-<th style="text-align:right;">
-Versicherer1
-</th>
-<th style="text-align:right;">
-Versicherer2
-</th>
-<th style="text-align:right;">
-Versicherer3
-</th>
-<th style="text-align:right;">
-Total (Anzahl)
-</th>
-<th style="text-align:right;">
-Total (Zuschlag)
-</th>
-</tr></thead>
-<tbody>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">GEviz</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GEviz/man/table_ge.html" class="external-link">table_ge</a></span><span class="op">(</span></span>
+<span>    titel <span class="op">=</span> <span class="st">"Übersicht PCG Ansätze"</span>,</span>
+<span>    beschrieb <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
+<table class="table huxtable" data-quarto-disable-processing="true" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; width: 100%; margin-left: auto; margin-right: auto;  " id="tab:pcg_ansaetze">
+<caption style="caption-side: top; text-align: left;">Übersicht PCG Ansätze</caption>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
 <tr>
-<td style="text-align:left;">
-KRK
-</td>
-<td style="text-align:right;">
-3158.81
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-19
-</td>
-<td style="text-align:right;">
-35
-</td>
-<td style="text-align:right;">
-110558.39
-</td>
+<th style="vertical-align: middle; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">PCG</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">PCG Ansatz</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Versicherer1.00</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Versicherer2.00</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Versicherer3.00</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Total (Anzahl)</span></th>
+<th style="vertical-align: middle; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; background-color: rgb(0, 68, 131); font-weight: bold; font-size: 9pt;"><span style="color: rgb(255, 255, 255);">Total (Zuschlag)</span></th>
 </tr>
 <tr>
-<td style="text-align:left;">
-PSY
-</td>
-<td style="text-align:right;">
-1542.29
-</td>
-<td style="text-align:right;">
-12
-</td>
-<td style="text-align:right;">
-22
-</td>
-<td style="text-align:right;">
-23
-</td>
-<td style="text-align:right;">
-57
-</td>
-<td style="text-align:right;">
-87910.31
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">KRK</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">3158.81</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">7.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">9.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">19.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">35.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">110558.39</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-HCH
-</td>
-<td style="text-align:right;">
-187.97
-</td>
-<td style="text-align:right;">
-89
-</td>
-<td style="text-align:right;">
-171
-</td>
-<td style="text-align:right;">
-179
-</td>
-<td style="text-align:right;">
-439
-</td>
-<td style="text-align:right;">
-82520.26
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">PSY</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1542.29</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">12.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">22.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">23.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">57.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">87910.31</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-DEP
-</td>
-<td style="text-align:right;">
-180.50
-</td>
-<td style="text-align:right;">
-113
-</td>
-<td style="text-align:right;">
-128
-</td>
-<td style="text-align:right;">
-159
-</td>
-<td style="text-align:right;">
-400
-</td>
-<td style="text-align:right;">
-72199.51
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">HCH</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">187.97</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">89.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">171.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">179.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">439.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">82520.26</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-DM1
-</td>
-<td style="text-align:right;">
-647.69
-</td>
-<td style="text-align:right;">
-17
-</td>
-<td style="text-align:right;">
-29
-</td>
-<td style="text-align:right;">
-42
-</td>
-<td style="text-align:right;">
-88
-</td>
-<td style="text-align:right;">
-56997.05
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">DEP</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">180.50</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">113.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">128.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">159.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">400.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">72199.51</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-AIK
-</td>
-<td style="text-align:right;">
-1857.43
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-39006.05
-</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">DM1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">647.69</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">17.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">29.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">42.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">88.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">56997.05</td>
 </tr>
-</tbody>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AIK</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1857.43</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">8.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">3.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">10.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">21.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">39006.05</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">DM2.00hyp</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">317.80</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">34.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">45.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">35.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">114.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">36229.65</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">PAH</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">30649.62</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">0.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">30649.62</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">HIV</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">1314.89</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">7.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">6.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">8.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">21.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">27612.64</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">AST</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">315.19</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">20.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">25.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">35.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">80.00</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 1pt 0pt; border-top-color: rgb(0, 68, 131);   border-bottom-color: rgb(0, 68, 131);  padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">25215.45</td>
+</tr>
+<tr><td colspan="7" style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0pt 0pt; border-top-color: rgb(0, 68, 131);    padding: 6pt 6pt 6pt 6pt; font-weight: normal; font-size: 9pt;">  Quelle:  Eigene Darstellung, GE KVG.</td></tr>
 </table>
 </div>
 <div class="section level2">
