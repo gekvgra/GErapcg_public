@@ -123,7 +123,7 @@ denjenigen aus SORA PCG übereinstimmen.</p>
 Aargau<a class="anchor" aria-label="anchor" href="#%C3%BCbersicht-berechnungsergebnisse-f%C3%BCr-versicherer-1-in-kanton-aargau"></a>
 </h4>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">saldo</span><span class="op">[</span><span class="va">BagNr</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">Kanton</span> <span class="op">==</span> <span class="st">"AG"</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">saldo_ag_1</span> <span class="op">&lt;-</span> <span class="va">saldo</span><span class="op">[</span><span class="va">BagNr</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">Kanton</span> <span class="op">==</span> <span class="st">"AG"</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">a_tilde_kr</span>, <span class="op">-</span><span class="va">saldo_ohne_D</span>, <span class="op">-</span><span class="va">D_k</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
 <span>    `Aufenthalt Vorjahr` <span class="op">=</span> <span class="va">Aufenthalt_Vj</span>, </span>
@@ -132,12 +132,8 @@ Aargau<a class="anchor" aria-label="anchor" href="#%C3%BCbersicht-berechnungserg
 <span>    `Zuschlag PCG (Total)` <span class="op">=</span> <span class="va">pcg_sum_bkr</span>,</span>
 <span>    `Entlastung junge Erwachsene` <span class="op">=</span> <span class="va">D_total</span>,</span>
 <span>    `Saldo` <span class="op">=</span> <span class="va">saldo_mit_D</span></span>
-<span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">GEviz</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GEviz/man/table_ge.html" class="external-link">table_ge</a></span><span class="op">(</span></span>
-<span>    titel <span class="op">=</span> <span class="st">"Übersicht Saldo für Versicherer 1, Kanton Aargau"</span>,</span>
-<span>    beschrieb <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
-<table class="table huxtable" data-quarto-disable-processing="true" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; width: 100%; margin-left: auto; margin-right: auto;  " id="tab:saldo">
+<span>  <span class="op">)</span></span></code></pre></div>
+<table class="table huxtable" data-quarto-disable-processing="true" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; width: 100%; margin-left: auto; margin-right: auto;  " id="tab:output_saldo">
 <caption style="caption-side: top; text-align: left;">Übersicht Saldo für Versicherer 1, Kanton Aargau</caption>
 <col>
 <col>
@@ -289,7 +285,7 @@ Aargau<a class="anchor" aria-label="anchor" href="#%C3%BCbersicht-berechnungserg
 <h3 id="übersicht-der-pcg-ansätze-und-anzahl-pro-versicherer">Übersicht der PCG-Ansätze und Anzahl pro Versicherer<a class="anchor" aria-label="anchor" href="#%C3%BCbersicht-der-pcg-ans%C3%A4tze-und-anzahl-pro-versicherer"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pcg_nachweis</span><span class="op">[</span></span>
+<code class="sourceCode R"><span><span class="va">nachweis</span> <span class="op">&lt;-</span> <span class="va">pcg_nachweis</span><span class="op">[</span></span>
 <span>  <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">pcg_coef</span><span class="op">)</span>, on <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">pcg</span><span class="op">)</span></span>
 <span><span class="op">]</span><span class="op">[</span></span>
 <span>  ,<span class="fu">`:=`</span><span class="op">(</span>Versicherer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Versicherer"</span>, <span class="va">BagNr</span><span class="op">)</span><span class="op">)</span></span>
@@ -305,12 +301,8 @@ Aargau<a class="anchor" aria-label="anchor" href="#%C3%BCbersicht-berechnungserg
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>`Total (Zuschlag)` <span class="op">=</span> <span class="va">pcg_ansatz</span> <span class="op">*</span> <span class="va">`Total (Anzahl)`</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>PCG <span class="op">=</span> <span class="va">pcg</span>, `PCG Ansatz` <span class="op">=</span> <span class="va">pcg_ansatz</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Jahr</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">`Total (Zuschlag)`</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">GEviz</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GEviz/man/table_ge.html" class="external-link">table_ge</a></span><span class="op">(</span></span>
-<span>    titel <span class="op">=</span> <span class="st">"Übersicht PCG Ansätze"</span>,</span>
-<span>    beschrieb <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
-<table class="table huxtable" data-quarto-disable-processing="true" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; width: 100%; margin-left: auto; margin-right: auto;  " id="tab:pcg_ansaetze">
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">`Total (Zuschlag)`</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table huxtable" data-quarto-disable-processing="true" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; width: 100%; margin-left: auto; margin-right: auto;  " id="tab:output_pcg_nachweis">
 <caption style="caption-side: top; text-align: left;">Übersicht PCG Ansätze</caption>
 <col>
 <col>

@@ -54,7 +54,7 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="gerapcg-r-package-für-die-parallele-berechnung-des-risikoausgleichs">GErapcg: R-Package für die parallele Berechnung des Risikoausgleichs<a class="anchor" aria-label="anchor" href="#gerapcg-r-package-f%C3%BCr-die-parallele-berechnung-des-risikoausgleichs"></a>
 </h1></div>
-<p><a href="https://github.com/gekvgra/GErapcg/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/gekvgra/GErapcg/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://github.com/gekvgra/GErapcg/actions/workflows/R-CMD-check-dev.yaml" class="external-link"><img src="https://github.com/gekvgra/GErapcg/actions/workflows/R-CMD-check-dev.yaml/badge.svg" alt="R-CMD-check-dev"></a></p>
+<p><a href="https://github.com/gekvgra/GErapcg_public/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/gekvgra/GErapcg_public/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></p>
 <div class="section level2">
 <h2 id="voraussetzungen">Voraussetzungen<a class="anchor" aria-label="anchor" href="#voraussetzungen"></a>
 </h2>
@@ -63,21 +63,25 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class=".GErapcg-release">
+<div class="GErapcg-release">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Produktive Version</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/gekvgra/GErapcg.git"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class=".GErapcg-devel">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Entwicklungsversion</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/gekvgra/GErapcg.git"</span>, ref <span class="op">=</span> <span class="st">"dev"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/gekvgra/GErapcg_public.git"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="verwendung">Verwendung<a class="anchor" aria-label="anchor" href="#verwendung"></a>
 </h2>
-<p>Die Implementierung der Parallelberechnung umfasst 6 Rscripts: Um die Berechnung durchzuführen gibt es zwei Möglichkeiten. Die schnellere davon ist die Hilfsfunktion <code>compute_ra</code>. Alternativ liegt dem Package eine RMarkdown-Vorlage mit dem Namen <em>GE KVG Parallelberechnung Risikoausgleich</em> bei. Ein neues, auf dieser Vorlage basierendes Dokument kann über den folgenden Ablauf erzeugt werden:</p>
+<p>Die Implementierung der Parallelberechnung umfasst 6 Rscripts:</p>
+<ul>
+<li>Setup und Laden der Individualdaten</li>
+<li>Laden der PCG-Liste</li>
+<li>Zuordnung der PCG zu den Individualdaten und Hierarchisierung</li>
+<li>Preprocessing</li>
+<li>Berechnung</li>
+<li>PCG Nachweis</li>
+</ul>
+<p>Um die Berechnung durchzuführen gibt es zwei Möglichkeiten. Die schnellere davon ist die Hilfsfunktion <code>compute_ra</code>. Alternativ liegt dem Package eine RMarkdown-Vorlage mit dem Namen <em>GE KVG Parallelberechnung Risikoausgleich</em> bei. Ein neues, auf dieser Vorlage basierendes Dokument kann über den folgenden Ablauf erzeugt werden:</p>
 <blockquote>
 <p>File &gt; New File &gt; RMarkdown… &gt; From Template &gt; Parallelberechnung</p>
 </blockquote>
