@@ -1,0 +1,11 @@
+^GErapcg\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+.lintr
+.github/
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^doc$
+^Meta$

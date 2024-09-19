@@ -1,0 +1,42 @@
+Package: GErapcg
+Title: Calculation of the swiss risk equalization with PCG (RA PCG)
+Version: 1.2.0
+Authors@R: 
+    c(
+    person(given = "Magnus",
+           family = "Vieten",
+           role = c("aut"),
+           email = "magnus.vieten@kvg.org"),
+    person(given = "Yannick",
+           family = "Schwarz",
+           role = c("aut", "cre"),
+           email = "yannick.schwarz@kvg.org"),
+    person(given = "Thomas",
+           family = "Fischer",
+           role = c("aut"),
+           email = "thomas.fischer@kvg.org")
+           )
+Description: Package provides all necessary functions and scripts to calculate the swiss risk equalization with pcg.
+URL: https://www.kvg.org/de/risikoausgleich-_content---1--1047.html, https://urban-disco-7k3jo92.pages.github.io/
+License: GPL-3 + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    openxlsx,
+    broom
+Depends: 
+    R (>= 3.5.0),
+    bit64,
+    data.table,
+    dplyr,
+    magrittr
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    GEviz
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Remotes: github::gekvgra/GEviz

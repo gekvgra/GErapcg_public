@@ -1,0 +1,127 @@
+---
+title: "Zuweisung der PCG und Hierarchisierung"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Zuweisung der PCG und Hierarchisierung}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(GErapcg)
+library(huxtable)
+library(GEviz)
+```
+
+
+## Anmerkungen
+Zu Demonstrations- und Testzwecken beinhaltet das Paket einen Datensatz mit synthetischen Daten. Entsprechend werden Berechnungsergebnisse nicht mit denjenigen aus SORA PCG übereinstimmen.
+
+
+## Zuweisung von PCG
+
+Der Risikoausgleich berücksichtigt, dass bestimmte Krankheitsbilder mit einem höheren Risiko verbunden sind. Um dieses abbilden zu können, wird den versicherten Personen abhängig von den Medikamenten, die sie im Vorjahr bezogen haben, eine Patientenkostengruppe (PCG) zugewiesen. Grundvoraussetzung ist, dass die Medikamente im Abgabezeitpunkt auf der Spezialitätenliste vermerkt waren, dass sie im Berechnungsjahr in der PCG-Liste einer PCG zugeordnet waren, und dass die verabreichte Menge einen festgelegten Schwellenwert überschreitet ([Art. 5 VORA](https://www.fedlex.admin.ch/eli/cc/2016/674/de#art_5)). Die Schwellenwerte wurden vom EDI auf 3 Packungen für die PCG Krebs (KRE) sowie Krebs Komplex und 180 standardisierte Tagesdosen (DDD) für alle übrigen PCG festgelegt ([Art. 4 VORA-EDI](https://www.fedlex.admin.ch/eli/cc/2019/618/de#art_4)).
+
+
+### Implementierung
+
+Im Paket GErapcg ist die Zuweisung der PCG in der Funktion `GErapcg::pcg_grouping` implementiert. Bei den beiden notwendigen Eingabeobjekten handelt es sich um die Vorjahresdaten (Jahr T-1) mit Zeithorizont 26 Monaten und die mit `GErapcg::pcg_import` aufbereitete PCG Liste für das Ausgleichsjahr (Jahr T). Für jede versicherte Person werden die verabreichten Medikamente in ihrer Menge aggregiert und über die GTIN-Nummer einer PCG zugeordnet. Letztlich werden sämtliche Zeilen, bei denen der Schwellenwert nicht überschritten wurde, eliminiert. Das Output Objekt ist somit eine Aufführung sämtlicher versicherten Personen, denen eine PCG zugeordnet werden kann.
+
+```{r berech_gruppierung, message = FALSE, warning = FALSE}
+Jahr_T <- 2022
+Jahr_T_1 <- Jahr_T - 1
+Jahr_T_2 <- Jahr_T - 2
+
+ind_data <- data.table::as.data.table(test_data)[
+  ,
+  `:=`(
+    Jahr = Jahr + (Jahr_T - max(test_data$Jahr)),
+    Geburtsjahr = Geburtsjahr + (Jahr_T - max(test_data$Jahr))
+  )
+]
+
+#?pcg_grouping
+pcg_liste <- GErapcg::pcg_import(test_pcglist)
+
+pcg_grouped <- GErapcg::pcg_grouping(
+  data_input = ind_data[Jahr == Jahr_T_1 & MonateHorizont == 26],
+  pcg_liste = pcg_liste
+)
+```
+
+
+```{r, echo=FALSE, results = "asis"}
+pcg_grouped %>% 
+  mutate(
+    across(c(Jahr, Geburtsjahr), as.integer),
+    AhvNr = as.character(AhvNr)
+    ) %>% 
+  rename(
+    PCG = pcg) %>% 
+  group_by(Jahr, MonateHorizont, AhvNr, Geburtsjahr) %>% 
+  summarise(
+    PCG = paste0(unique(sort(PCG)), collapse = ",")
+  ) %>% 
+  ungroup() %>% 
+  head(10) %>% 
+  GEviz::table_ge(
+    titel = "pcg_grouping: Zuweisung der PCG zu Versicherten",
+    beschrieb = "Übersicht der zugewiesenen PCG je versicherte Person, erste 10 Zeilen.",
+    digits = 0
+  )
+```
+
+## Hierarchisierung
+
+Grundsätzlich können versicherten Personen keine, eine oder mehrere PCG zugeordnet werden. Wo mehrere PCGs dasselbe oder ein verwandtes gesundheitliches Problem betreffen, kann das EDI allerdings Hierarchisierungen unter den PCG vorsehen ([Art. 4 VORA](https://www.fedlex.admin.ch/eli/cc/2016/674/de#art_4) und [Art. 3 VORA-EDI](https://www.fedlex.admin.ch/eli/cc/2019/618/de#art_3)). Diese wirken sich folgendermassen auf die PCG-Zuweisung aus:
+
+- Personen mit den PCG Diabetes Typ 1 (DM1) und Diabetes Typ 2 (DM2) werden nach der Hierarchisierung der PCG DM1 zugewiesen.
+- Personen mit den PCG Krebs (KRE) und Krebs Komplex (KRK) werden nach der Hierarchisierung der PCG KRK zugewiesen.
+
+Relevant sind ferner nicht eigenständige PCGs im Sinne von [Art. 4 Abs. 1ter VORA](https://www.fedlex.admin.ch/eli/cc/2016/674/de#art_4) und [Art. 2 VORA-EDI](https://www.fedlex.admin.ch/eli/cc/2019/618/de#art_2). Aktuell betrifft dies lediglich die PCG Hypertonie, welche zur Bildung der kombinierten PCG Diabetes Typ 2 mit Bluthochdruck (DM2+hyp) benötigt wird, selber aber nicht in der Berechnung des Risikoausgleichs berücksichtigt wird.
+
+```{r, echo = FALSE}
+pcgs <- read.csv(system.file("extdata/pcg.csv", package = "GErapcg"), sep = ";")
+read.csv(system.file("extdata/hierarchy.csv", package = "GErapcg"), sep = ";") %>%
+  mutate(across(c(pcg_1, pcg_2, einstufung), function(x) pcgs[match(x, pcgs$pcg_nr), "pcg"])) %>% 
+  rename(
+    `PCG 1` = pcg_1, 
+    `PCG 2` = pcg_2, 
+    Einstufung = einstufung, 
+    Exklusiv = exklusiv
+  ) %>% 
+  GEviz::table_ge(
+    titel = "Übersicht der Hierarchisierungsregeln aus Art. 3. VORA-EDI",
+    beschrieb = "",
+    digits = 0
+  )
+```
+
+
+### Implementierung
+
+Die in [Art. 3 VORA-EDI](https://www.fedlex.admin.ch/eli/cc/2019/618/de#art_3) definieren Hierarchisierungsregeln sind im Package in der Datei "extdata/hierarchy.csv" hinterlegt.
+Die Hierarchisierung an sich ist in der Funktion `GErapcg::pcg_hierarchy` implementiert. Das Eingabeobjekt entspricht dem Output von `GErapcg::pcg_grouping`.
+
+```{r}
+#?GErapcg::pcg_hierarchy
+hierarchy <- GErapcg::pcg_hierarchy(pcg_grouped, direction = "wide") 
+```
+
+```{r, echo = FALSE}
+hierarchy %>%
+  mutate(
+    Geburtsjahr = as.character(Geburtsjahr),
+    AhvNr = as.character(AhvNr)
+  ) %>%  
+  select(KRE, KRK, DM1, DM2, DM2hyp) %>% 
+  filter(KRE == 1 | KRK == 1 | DM1 == 1 | DM2 == 1 | DM2hyp == 1)  %>% 
+  unique() %>% 
+  table_ge(
+    titel = "pcg_hierarchy: Hierarchisierung der PCG",
+    beschrieb = "Übersicht der Konfigurationen in den PCG KRE, KRK, DM1, DM2 und DM2hyp nach der Hierarchisierung. Innerhalb der Hierarchien gibt es maximal eine zugewiesene PC.",
+    digits = 0
+  )
+```
+

@@ -1,0 +1,128 @@
+---
+title: "RA Parallelberechnung mit synthetischen Daten"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{RA Parallelberechnung mit synthetischen Daten}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+options(
+  scipen = 999,
+  max.print = 2000,
+  digits = 5
+)
+
+use_digits <- 2
+```
+
+## Anmerkungen
+Das vorliegende Skript implementiert die Berechnung des Risikoausgleichs, wie sie in SORA PCG implementiert ist. Zu Demonstrations- und Testzwecken beinhaltet das Paket einen Datensatz mit synthetischen Daten. Entsprechend werden Berechnungsergebnisse nicht mit denjenigen aus SORA PCG übereinstimmen.
+
+## Lade dependencies
+```{r dependencies, message=FALSE, warning=FALSE}
+library(dplyr)
+library(data.table)
+library(GErapcg)
+library(GEviz)
+```
+
+## Konfiguration
+```{r config}
+# Individualdaten: wenn NULL, werden die im Package integrierten, synthetischen 
+# Testdaten verwendet. Siehe hierzu Disclaimer im README sowie ?test_data
+ind_data <- NULL
+
+# PCG Liste: entweder ein data.frame oder eine Pfadangabe zu einer .xlsx-Datei
+# Wenn NULL, wird die im Package integrierte PCG Liste zum Ausgleichsjahr 2022 
+# verwendet. 
+pcg_list <- NULL
+
+# Ausgleichsjahr: wenn ind_data NULL ist, werden die Jahresangaben in den
+# Testdaten entsprechend rekodiert.
+Year <- 2022
+
+# Angabe, ob Zwischenresultate bereinigt werden sollen
+Clean_Steps <- FALSE
+```
+
+
+## Parallelberechnung
+```{r ind_data, message = FALSE, warning = FALSE}
+source(system.file("script/1-Setup.R", package = "GErapcg"))
+source(system.file("script/2-Pcg-List.R", package = "GErapcg"))
+source(system.file("script/3-Grouping-Hierarchy.R", package = "GErapcg"))
+source(system.file("script/4-Preparation.R", package = "GErapcg"))
+source(system.file("script/5-Berechnung.R", package = "GErapcg"))
+source(system.file("script/6-PCG-Nachweis.R", package = "GErapcg"))
+```
+
+Alternativ kann die Parallelberechnung auch mit der Funktion `GErapcg::compute_ra` berechnet werden.
+
+## Beispiele
+
+### Übersicht Berechnungsergebnisse für Versicherer 1 in Kanton Aargau
+
+```{r saldo}
+saldo_ag_1 <- saldo[BagNr == 1 & Kanton == "AG"] %>% 
+  select(-a_tilde_kr, -saldo_ohne_D, -D_k) %>% 
+  rename(
+    `Aufenthalt Vorjahr` = Aufenthalt_Vj, 
+    Monate = Monate_T,
+    `Zuschlag Risikogruppe (Total)` = a_bkr_sum,
+    `Zuschlag PCG (Total)` = pcg_sum_bkr,
+    `Entlastung junge Erwachsene` = D_total,
+    `Saldo` = saldo_mit_D
+  )
+```
+
+```{r output_saldo, echo = FALSE}
+saldo_ag_1 %>%
+  head(10) %>%
+  GEviz::table_ge(
+    titel = "Übersicht Saldo für Versicherer 1, Kanton Aargau",
+    beschrieb = "")
+```
+
+## Übersicht der PCG-Ansätze und Anzahl pro Versicherer
+
+```{r pcg_ansaetze}
+nachweis <- pcg_nachweis[
+  as.data.table(pcg_coef), on = .(pcg)
+][
+  ,`:=`(Versicherer = paste0("Versicherer", BagNr))
+] %>%
+  dcast(
+    Jahr + pcg + pcg_ansatz ~ Versicherer, value.var = "pcg",
+    fun.aggregate = length
+  ) %>% 
+  rowwise() %>%
+  mutate(
+    `Total (Anzahl)` = sum(c_across(starts_with("Versicherer"))),
+  ) %>%
+  mutate(`Total (Zuschlag)` = pcg_ansatz * `Total (Anzahl)`) %>% 
+  rename(PCG = pcg, `PCG Ansatz` = pcg_ansatz) %>% 
+  select(-Jahr) %>% 
+  arrange(desc(`Total (Zuschlag)`))
+
+```
+
+```{r output_pcg_nachweis, echo = FALSE}
+nachweis %>% 
+  head(10) %>%
+  GEviz::table_ge(
+    titel = "Übersicht PCG Ansätze",
+    beschrieb = ""
+  )
+```
+
+
+# Weitere Informationen
+- [Webbereich GE KVG Risikoausgleich](https://www.kvg.org/versicherer/risikoausgleich/risikoausgleich-pcg/)
+- [Berechnungsformel für den Risikoausgleich mit PCG ab 2020](https://www.bag.admin.ch/bag/de/home/versicherungen/krankenversicherung/krankenversicherung-versicherer-aufsicht/risikoausgleich.html)

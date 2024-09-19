@@ -1,0 +1,31 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+name: "Add public release"
+
+on:
+  workflow_run:
+    workflows: [R-CMD-check]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  Publish:
+    if: github.repository == 'gekvgra/GErapcg'
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+      - name: Push to public repo
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git checkout master
+          git remote add public_repo https://github.com/gekvgra/GErapcg_public.git
+          git checkout --orphan latest_release
+          git add --all -- ':!.github/workflows/public_release.yaml' ':!.github/workflows/R-CMD-check-dev.yaml'
+          git commit -am "Newest release"
+          git push public_repo latest_release:master --force

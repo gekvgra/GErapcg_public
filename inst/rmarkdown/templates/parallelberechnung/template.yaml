@@ -1,0 +1,4 @@
+name: GE Parallelberechnung RA
+description: >
+   R Implementierung der Parallelberechnung, wie sie in SORA PCG implementiert ist.
+create_dir: FALSE
